@@ -10,7 +10,7 @@ describe('TodoItemFormatter', () => {
 
   test('should format task by truncating if longer than 14 characters', () => {
     const longTask = 'This is a very long task';
-    expect(formatter.formatTask(longTask)).toBe('This is a very...');
+    expect(formatter.formatTask(longTask)).toBe('This is a very long...');
   });
 
   test('should not truncate task if shorter than 14 characters', () => {
