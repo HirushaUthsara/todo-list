@@ -16,12 +16,8 @@ class TodoItemFormatter {
 // Class responsible for managing Todo items
 class TodoManager {
   constructor(todoItemFormatter) {
-    this.todos = [];
+    this.todos = JSON.parse(localStorage.getItem("todos")) || [];
     this.todoItemFormatter = todoItemFormatter;
-    
-    if (typeof localStorage !== 'undefined') {
-      this.todos = JSON.parse(localStorage.getItem("todos")) || [];
-    }
   }
 
   addTodo(task, dueDate) {
@@ -92,15 +88,14 @@ class TodoManager {
 }
 
 // Class responsible for managing the UI and handling events
-class UIManager {  constructor(todoManager, todoItemFormatter) {
+class UIManager {
+  constructor(todoManager, todoItemFormatter) {
     this.todoManager = todoManager;
     this.todoItemFormatter = todoItemFormatter;
-    
-    if (typeof document !== 'undefined') {
-      this.taskInput = document.querySelector("input");
-      this.dateInput = document.querySelector(".schedule-date");
-      this.addBtn = document.querySelector(".add-task-button");
-      this.todosListBody = document.querySelector(".todos-list-body");
+    this.taskInput = document.querySelector("input");
+    this.dateInput = document.querySelector(".schedule-date");
+    this.addBtn = document.querySelector(".add-task-button");
+    this.todosListBody = document.querySelector(".todos-list-body");
     this.alertMessage = document.querySelector(".alert-message");
     this.deleteAllBtn = document.querySelector(".delete-all-btn");
 
@@ -299,17 +294,11 @@ getThemeFromLocalStorage() {
 
 // Instantiating the classes
 const todoItemFormatter = new TodoItemFormatter();
-// Initialize UI only in browser environment
-if (typeof document !== 'undefined') {
-  const todoManager = new TodoManager(todoItemFormatter);
-  const uiManager = new UIManager(todoManager, todoItemFormatter);
-  const themes = document.querySelectorAll(".theme-item");
-  const html = document.querySelector("html");
-  const themeSwitcher = new ThemeSwitcher(themes, html);
-}
+const todoManager = new TodoManager(todoItemFormatter);
+const uiManager = new UIManager(todoManager, todoItemFormatter);
+const themes = document.querySelectorAll(".theme-item");
+const html = document.querySelector("html");
+const themeSwitcher = new ThemeSwitcher(themes, html);
 
 
-// Export for testing
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { TodoItemFormatter, TodoManager };
-}
+module.exports = { TodoItemFormatter, TodoManager, ThemeSwitcher };
